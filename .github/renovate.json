@@ -1,0 +1,11 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "dependencyDashboard": false,
+  "pip_requirements": {
+    "fileMatch": [
+      "(^|\/)services\/(database|predictor|storage|visualization|web)\/requirements.(txt|pip)$"
+    ]
+  }
+}
