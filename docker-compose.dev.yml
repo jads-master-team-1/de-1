@@ -14,7 +14,18 @@ services:
       - FLASK_PREDICTOR_SERVICE=http://predictor:8080/api
       - FLASK_STORAGE_SERVICE=http://storage:8080/api
       - FLASK_VISUALIZATION_SERVICE=http://visualization:8080/api
-    ports:
-      - 8080:8080
     volumes:
       - ./services/web/src:/opt/service/src
+
+predictor:
+    build:
+      context: ./services/predictor
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - database
+      - storage
+    environment:
+      - FLASK_DATABASE_SERVICE=http://database:8080/api
+      - FLASK_STORAGE_SERVICE=http://storage:8080/api
+    volumes:
+      - ./services/predictor/src:/opt/service/src
