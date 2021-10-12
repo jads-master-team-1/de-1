@@ -19,7 +19,7 @@ services:
     volumes:
       - ./services/web/src:/opt/service/src
 
-predictor:
+  predictor:
     build:
       context: ./services/predictor
       dockerfile: Dockerfile.dev
@@ -31,3 +31,11 @@ predictor:
       - FLASK_STORAGE_SERVICE=http://storage:8080/api
     volumes:
       - ./services/predictor/src:/opt/service/src
+
+  visualization:
+    build:
+      context: ./services/visualization
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./services/visualization/src:/opt/service/src
+      
