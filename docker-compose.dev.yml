@@ -46,4 +46,4 @@ services:
     environment:
       - FLASK_FILES_PATH=/var/opt/files/
     volume:
-      - ./services/storage/files:/var/opt/files
+      - ./services/storage/src:/opt/service/src
