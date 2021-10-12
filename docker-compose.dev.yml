@@ -1,5 +1,49 @@
 version: "3.9"
 services:
+  database:
+    build:
+      context: ./services/database
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - postgres
+    environment:
+      - FLASK_DB_HOST=postgres
+      - FLASK_DB_PORT=5432
+      - FLASK_DB_USER=postgres
+      - FLASK_DB_PASSWORD=postgres
+      - FLASK_DB_NAME=data_engineering_1_dev
+    volumes:
+      - ./services/database/src:/opt/service/src
+
+  predictor:
+    build:
+      context: ./services/predictor
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - database
+      - storage
+    environment:
+      - FLASK_DATABASE_SERVICE=http://database:8080/api
+      - FLASK_STORAGE_SERVICE=http://storage:8080/api
+    volumes:
+      - ./services/predictor/src:/opt/service/src
+
+  storage:
+    build:
+      context: ./services/storage
+      dockerfile: Dockerfile.dev
+    environment:
+      - FLASK_FILES_PATH=/var/opt/files/
+    volumes:
+      - ./services/storage/src:/opt/service/src
+
+  visualization:
+    build:
+      context: ./services/visualization
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./services/visualization/src:/opt/service/src
+
   web:
     build:
       context: ./services/web
@@ -18,50 +62,6 @@ services:
       - 8080:8080
     volumes:
       - ./services/web/src:/opt/service/src
-
-  predictor:
-    build:
-      context: ./services/predictor
-      dockerfile: Dockerfile.dev
-    depends_on:
-      - database
-      - storage
-    environment:
-      - FLASK_DATABASE_SERVICE=http://database:8080/api
-      - FLASK_STORAGE_SERVICE=http://storage:8080/api
-    volumes:
-      - ./services/predictor/src:/opt/service/src
-
-  visualization:
-    build:
-      context: ./services/visualization
-      dockerfile: Dockerfile.dev
-    volumes:
-      - ./services/visualization/src:/opt/service/src
-
-  storage:
-    build:
-      context: ./services/storage
-      dockerfile: Dockerfile.dev
-    environment:
-      - FLASK_FILES_PATH=/var/opt/files/
-    volume:
-      - ./services/storage/src:/opt/service/src
-      
-  database:
-    build:
-      context: ./services/database
-      dockerfile: Dockerfile.dev
-    depends_on:
-      - postgres
-    environment:
-      - FLASK_DB_HOST=postgres
-      - FLASK_DB_PORT=5432
-      - FLASK_DB_USER=postgres
-      - FLASK_DB_PASSWORD=postgres
-      - FLASK_DB_NAME=data_engineering_1_dev
-    volumes:
-      - ./services/database/src:/opt/service/src
 
   postgres:
     image: postgres:latest
