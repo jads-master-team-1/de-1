@@ -32,4 +32,12 @@ services:
     build:
       context: ./services/visualization
       dockerfile: Dockerfile.prod
-      
+  
+  storage:
+    build:
+      context: ./services/storage
+      dockerfile: Dockerfile.prod
+    environment:
+      - FLASK_FILES_PATH=/var/opt/files/
+    volume:
+      - ./services/storage/files:/var/opt/files

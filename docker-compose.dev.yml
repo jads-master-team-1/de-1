@@ -38,4 +38,12 @@ services:
       dockerfile: Dockerfile.dev
     volumes:
       - ./services/visualization/src:/opt/service/src
-      
+
+  storage:
+    build:
+      context: ./services/storage
+      dockerfile: Dockerfile.dev
+    environment:
+      - FLASK_FILES_PATH=/var/opt/files/
+    volume:
+      - ./services/storage/files:/var/opt/files
