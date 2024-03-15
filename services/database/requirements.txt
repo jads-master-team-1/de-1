@@ -1,4 +1,4 @@
-black==21.9b0
+black==24.3.0
 Flask==2.0.2
 Flask-SQLAlchemy==2.5.1
 gunicorn==20.1.0
